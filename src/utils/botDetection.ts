@@ -158,8 +158,8 @@ export const analyzeWithLOF = (user: UserData): ModelPrediction => {
     suspicionScore += 20;
   }
 
-  const isBot = suspicionScore > 32;
-  const confidence = Math.min(suspicionScore / 100, 0.91);
+  const isBot = suspicionScore > 25;
+  const confidence = Math.min(0.05 + suspicionScore / 110, 0.91);
 
   return {
     model: 'Local Outlier Factor',
