@@ -51,10 +51,11 @@ const ModelComparison = ({ performanceData, radarData, detectionTrend }: ModelCo
               <ResponsiveContainer width="100%" height={300}>
                 <RadarChart data={radarData}>
                   <PolarGrid className="stroke-muted" strokeDasharray="3 3" />
-                  <PolarAngleAxis dataKey="feature" className="text-xs" />
+                  <PolarAngleAxis dataKey="feature" className="text-sm font-semibold" />
                   <PolarRadiusAxis angle={90} domain={[0, 100]} className="text-xs" />
                   <Tooltip 
                     contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                    formatter={(value: number) => value.toFixed(2)}
                   />
                   <Radar name="Isolation Forest" dataKey="isolation" stroke="hsl(var(--chart-1))" strokeWidth={2} fill="hsl(var(--chart-1))" fillOpacity={0.3} dot={{ r: 3 }} />
                   <Radar name="One-Class SVM" dataKey="svm" stroke="hsl(var(--chart-2))" strokeWidth={2} fill="hsl(var(--chart-2))" fillOpacity={0.3} dot={{ r: 3 }} />
