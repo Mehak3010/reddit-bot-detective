@@ -50,16 +50,16 @@ const ModelComparison = ({ performanceData, radarData, detectionTrend }: ModelCo
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <RadarChart data={radarData}>
-                  <PolarGrid className="stroke-muted" />
+                  <PolarGrid className="stroke-muted" strokeDasharray="3 3" />
                   <PolarAngleAxis dataKey="feature" className="text-xs" />
                   <PolarRadiusAxis angle={90} domain={[0, 100]} className="text-xs" />
                   <Tooltip 
                     contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
                   />
-                  <Radar name="Isolation Forest" dataKey="isolation" stroke="hsl(var(--chart-1))" fill="hsl(var(--chart-1))" fillOpacity={0.3} />
-                  <Radar name="One-Class SVM" dataKey="svm" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" fillOpacity={0.3} />
-                  <Radar name="Elliptic Envelope" dataKey="elliptic" stroke="hsl(var(--chart-3))" fill="hsl(var(--chart-3))" fillOpacity={0.3} />
-                  <Radar name="LOF" dataKey="lof" stroke="hsl(var(--chart-4))" fill="hsl(var(--chart-4))" fillOpacity={0.3} />
+                  <Radar name="Isolation Forest" dataKey="isolation" stroke="hsl(var(--chart-1))" strokeWidth={2} fill="hsl(var(--chart-1))" fillOpacity={0.3} dot={{ r: 3 }} />
+                  <Radar name="One-Class SVM" dataKey="svm" stroke="hsl(var(--chart-2))" strokeWidth={2} fill="hsl(var(--chart-2))" fillOpacity={0.3} dot={{ r: 3 }} />
+                  <Radar name="Elliptic Envelope" dataKey="elliptic" stroke="hsl(var(--chart-3))" strokeWidth={2} fill="hsl(var(--chart-3))" fillOpacity={0.3} dot={{ r: 3 }} />
+                  <Radar name="LOF" dataKey="lof" stroke="hsl(var(--chart-4))" strokeWidth={2} fill="hsl(var(--chart-4))" fillOpacity={0.3} dot={{ r: 3 }} />
                   <Legend />
                 </RadarChart>
               </ResponsiveContainer>

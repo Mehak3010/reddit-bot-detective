@@ -114,32 +114,29 @@ export const calculateRadarData = (users: UserData[]) => {
     });
   });
 
-  // Calculate averages and create radar data
+  // Calculate averages and create radar data with one entry per feature
+  const speedEntry: any = { feature: "Speed" };
+  const accuracyEntry: any = { feature: "Accuracy" };
+  const scalabilityEntry: any = { feature: "Scalability" };
+  const robustnessEntry: any = { feature: "Robustness" };
+  const interpretabilityEntry: any = { feature: "Interpretability" };
+
   models.forEach(model => {
     const counter = modelCounters[model];
     const validCount = Math.max(counter.count, 1); // Avoid division by zero
-    
-    radarData.push({
-      feature: "Speed",
-      [model]: counter.speed / validCount
-    });
-    radarData.push({
-      feature: "Accuracy",
-      [model]: (counter.accuracy / validCount) * 100
-    });
-    radarData.push({
-      feature: "Scalability",
-      [model]: (counter.scalability / validCount) * 100
-    });
-    radarData.push({
-      feature: "Robustness",
-      [model]: (counter.robustness / validCount) * 100
-    });
-    radarData.push({
-      feature: "Interpretability",
-      [model]: (counter.interpretability / validCount) * 100
-    });
+
+    speedEntry[model] = counter.speed / validCount;
+    accuracyEntry[model] = (counter.accuracy / validCount) * 100;
+    scalabilityEntry[model] = (counter.scalability / validCount) * 100;
+    robustnessEntry[model] = (counter.robustness / validCount) * 100;
+    interpretabilityEntry[model] = (counter.interpretability / validCount) * 100;
   });
+
+  radarData.push(speedEntry);
+  radarData.push(accuracyEntry);
+  radarData.push(scalabilityEntry);
+  radarData.push(robustnessEntry);
+  radarData.push(interpretabilityEntry);
 
   return radarData;
 };
