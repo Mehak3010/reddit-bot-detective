@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import HeroSection from "@/components/HeroSection";
+import HeroSection from "@/components/ModelCards";
 import DatasetOverview from "@/components/DatasetOverview";
 import UserAnalysisSection from "@/components/UserAnalysisSection";
 import ModelComparison from "@/components/ModelComparison";
@@ -23,19 +23,19 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <UserAnalysisSection onAnalysis={handleAnalysis} />
       <HeroSection />
       <DatasetOverview />
-      <UserAnalysisSection onAnalysis={handleAnalysis} />
-      <ModelComparison 
+      <ModelComparison
         performanceData={performanceData}
         radarData={radarData}
         detectionTrend={detectionTrend}
       />
-      <ModelDetails 
+      <ModelDetails
         performanceData={analysisPerformed ? performanceData : []}
         radarData={analysisPerformed ? radarData : []}
       />
-      
+
       <footer className="py-8 px-4 border-t border-border">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
           <p>Reddit Bot Detection Comparative Analysis • Unsupervised Learning Models</p>
