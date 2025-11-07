@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import HeroSection from "@/components/ModelCards";
+import Header from "@/components/Header";
+import ModelCards from "@/components/ModelCards";
 import DatasetOverview from "@/components/DatasetOverview";
-import UserAnalysisSection from "@/components/UserAnalysisSection";
 import ModelComparison from "@/components/ModelComparison";
 import ModelDetails from "@/components/ModelDetails";
 import { getUsersFromCSV, UserData } from "@/utils/csvParser";
@@ -23,8 +23,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <UserAnalysisSection onAnalysis={handleAnalysis} />
-      <HeroSection />
+      <Header onAnalysis={handleAnalysis} />
+      <ModelCards />
       <DatasetOverview />
       <ModelComparison
         performanceData={performanceData}
