@@ -9,7 +9,7 @@ interface ModelComparisonProps {
 
 const ModelComparison = ({ performanceData, radarData, detectionTrend }: ModelComparisonProps) => {
   return (
-    <section className="py-12 px-4 md:px-8 bg-secondary/30">
+    <section className="pt-4 pb-12 px-4 md:px-8 bg-secondary/30">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold mb-8">Model Performance Comparison</h2>
 
