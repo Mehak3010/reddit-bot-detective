@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 
 const ModelCards = () => {
   return (
-    <section className="py-12 px-4 md:px-8">
+    <section className="py-6 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
           <Card className="p-4 border-l-4 border-l-primary hover:shadow-lg transition-shadow">
