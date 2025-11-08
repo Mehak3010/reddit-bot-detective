@@ -111,7 +111,7 @@ const ModelDetails = ({ performanceData, radarData }: ModelDetailsProps) => {
   ];
 
   return (
-    <section className="pt-4 pb-12 px-4 md:px-8">
+    <section className="pt-0 pb-12 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold mb-8">Model Deep Dive</h2>
 
