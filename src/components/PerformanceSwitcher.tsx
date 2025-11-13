@@ -26,30 +26,29 @@ const PerformanceSwitcher = ({ performanceData, radarData, detectionTrend }: Per
   return (
     <section className="pt-4 pb-12 px-4 md:px-8">
       <div className="max-w-5xl mx-auto">
-        <Card>
-          <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <CardTitle>Model Performance Comparison</CardTitle>
-            <Tabs defaultValue="metrics" className="w-full md:w-auto">
+        <Tabs defaultValue="metrics">
+          <Card>
+            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <CardTitle>Model Performance Comparison</CardTitle>
               <TabsList className="w-full md:w-auto">
                 <TabsTrigger value="metrics" className="flex-1">Metrics</TabsTrigger>
                 <TabsTrigger value="characteristics" className="flex-1">Characteristics</TabsTrigger>
                 <TabsTrigger value="trend" className="flex-1">Detection Trend</TabsTrigger>
               </TabsList>
-            </Tabs>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="metrics">
+            </CardHeader>
+            <CardContent>
               <TabsContent value="metrics">
                 <div className="w-full overflow-x-auto">
                   <ReBarChart width={600} height={300} data={performanceData}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="model" />
-                    <YAxis />
+                    <XAxis dataKey="metric" />
+                    <YAxis domain={[0, 1]} />
                     <ReTooltip />
                     <Legend />
-                    <Bar dataKey="accuracy" fill="#4f46e5" name="Accuracy" />
-                    <Bar dataKey="precision" fill="#06b6d4" name="Precision" />
-                    <Bar dataKey="recall" fill="#f59e0b" name="Recall" />
+                    <Bar dataKey="isolation" name="Isolation Forest" fill="#4f46e5" />
+                    <Bar dataKey="svm" name="One-Class SVM" fill="#06b6d4" />
+                    <Bar dataKey="elliptic" name="Elliptic Envelope" fill="#f59e0b" />
+                    <Bar dataKey="lof" name="LOF" fill="#10b981" />
                   </ReBarChart>
                 </div>
               </TabsContent>
@@ -58,10 +57,11 @@ const PerformanceSwitcher = ({ performanceData, radarData, detectionTrend }: Per
                 <div className="w-full overflow-x-auto">
                   <ReRadarChart width={600} height={300} data={radarData}>
                     <PolarGrid />
-                    <PolarAngleAxis dataKey="attribute" />
-                    <Radar dataKey="Isolation Forest" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.4} />
-                    <Radar dataKey="One-Class SVM" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.4} />
-                    <Radar dataKey="Elliptic Envelope" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.4} />
+                    <PolarAngleAxis dataKey="feature" />
+                    <Radar dataKey="isolation" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.4} />
+                    <Radar dataKey="svm" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.4} />
+                    <Radar dataKey="elliptic" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.4} />
+                    <Radar dataKey="lof" stroke="#10b981" fill="#10b981" fillOpacity={0.4} />
                   </ReRadarChart>
                 </div>
               </TabsContent>
@@ -74,15 +74,16 @@ const PerformanceSwitcher = ({ performanceData, radarData, detectionTrend }: Per
                     <YAxis />
                     <ReTooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="Isolation Forest" stroke="#4f46e5" />
-                    <Line type="monotone" dataKey="One-Class SVM" stroke="#06b6d4" />
-                    <Line type="monotone" dataKey="Elliptic Envelope" stroke="#f59e0b" />
+                    <Line type="monotone" dataKey="isolation" stroke="#4f46e5" />
+                    <Line type="monotone" dataKey="svm" stroke="#06b6d4" />
+                    <Line type="monotone" dataKey="elliptic" stroke="#f59e0b" />
+                    <Line type="monotone" dataKey="lof" stroke="#10b981" />
                   </ReLineChart>
                 </div>
               </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Tabs>
       </div>
     </section>
   );
