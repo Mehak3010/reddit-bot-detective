@@ -15,7 +15,7 @@ const AccountSummaryPanel = ({ userData, predictions }: AccountSummaryPanelProps
 
   return (
     <section className="px-4 md:px-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <Card className="border border-border">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -36,7 +36,7 @@ const AccountSummaryPanel = ({ userData, predictions }: AccountSummaryPanelProps
             <CardDescription>Summary and model verdicts</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div className="text-sm">
                 <p className="text-muted-foreground">Total karma</p>
                 <p className="font-semibold">{userData.total_karma}</p>
