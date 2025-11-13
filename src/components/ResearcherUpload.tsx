@@ -17,7 +17,15 @@ const ResearcherUpload = () => {
     setMessage("");
     try {
       const res = await uploadDataset(datasetName.trim() || file.name, file);
-      setMessage(`Uploaded: inserted ${res.inserted}, skipped ${res.skipped}`);
+      if (res.publicUrl) {
+        setMessage(`Uploaded to cloud storage: ${res.publicUrl}`);
+      } else if (res.storagePath) {
+        setMessage(`Uploaded to storage path: ${res.storagePath}`);
+      } else if (res.localPath) {
+        setMessage(`Saved locally at ${res.localPath}`);
+      } else {
+        setMessage('Upload completed.');
+      }
     } catch (err: any) {
       setMessage(err?.message || "Upload failed");
     } finally {
@@ -31,7 +39,7 @@ const ResearcherUpload = () => {
         <div className="border rounded-lg p-4">
           <h2 className="text-xl font-semibold mb-3">Upload Your Dataset</h2>
           <p className="text-sm text-muted-foreground mb-4">
-            Upload a CSV of usernames and attributes; we will merge it into the main dataset.
+            Upload a CSV; we will store the original file in secure cloud storage.
           </p>
           <form onSubmit={onUpload} className="space-y-3">
             <div>
