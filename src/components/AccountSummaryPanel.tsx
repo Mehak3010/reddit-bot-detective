@@ -14,7 +14,7 @@ const AccountSummaryPanel = ({ userData, predictions }: AccountSummaryPanelProps
   const overallIsBot = botVotes >= 2;
 
   return (
-    <section className="px-4 md:px-8">
+    <section className="pt-4 pb-12 px-4 md:px-8">
       <div className="max-w-4xl mx-auto">
         <Card className="border border-border">
           <CardHeader>
