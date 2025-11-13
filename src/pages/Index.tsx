@@ -4,6 +4,8 @@ import ModelCards from "@/components/ModelCards";
 import DatasetOverview from "@/components/DatasetOverview";
 import ModelComparison from "@/components/ModelComparison";
 import ModelDetails from "@/components/ModelDetails";
+import ResearcherUpload from "@/components/ResearcherUpload";
+import MobilePerformanceTabs from "@/components/MobilePerformanceTabs";
 import { getUsersFromCSV, UserData } from "@/utils/csvParser";
 import { calculatePerformanceData, calculateRadarData, calculateDetectionTrend } from "@/utils/graphUtils";
 
@@ -24,17 +26,26 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header onAnalysis={handleAnalysis} />
+      <ResearcherUpload />
       <ModelCards />
       <DatasetOverview />
-      <ModelComparison
+      <MobilePerformanceTabs
         performanceData={performanceData}
         radarData={radarData}
         detectionTrend={detectionTrend}
+        analysisPerformed={analysisPerformed}
       />
-      <ModelDetails
-        performanceData={analysisPerformed ? performanceData : []}
-        radarData={analysisPerformed ? radarData : []}
-      />
+      <div className="hidden md:block">
+        <ModelComparison
+          performanceData={performanceData}
+          radarData={radarData}
+          detectionTrend={detectionTrend}
+        />
+        <ModelDetails
+          performanceData={analysisPerformed ? performanceData : []}
+          radarData={analysisPerformed ? radarData : []}
+        />
+      </div>
 
       <footer className="py-8 px-4 border-t border-border">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
