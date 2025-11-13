@@ -29,9 +29,15 @@ const ThemeToggle = () => {
   };
 
   return (
-    <Button onClick={toggle} variant="outline" className="h-8 px-3 py-1 flex items-center gap-2">
+    <Button
+      onClick={toggle}
+      variant="outline"
+      className="h-8 w-8 p-0 flex items-center justify-center"
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+    >
       {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-      <span className="text-xs">{isDark ? "Light" : "Dark"}</span>
+      <span className="sr-only">{isDark ? "Light" : "Dark"}</span>
     </Button>
   );
 };
