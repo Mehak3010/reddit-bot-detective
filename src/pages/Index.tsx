@@ -5,8 +5,9 @@ import DatasetOverview from "@/components/DatasetOverview";
 import ModelComparison from "@/components/ModelComparison";
 import ModelDetails from "@/components/ModelDetails";
 import ResearcherUpload from "@/components/ResearcherUpload";
-import MobilePerformanceTabs from "@/components/MobilePerformanceTabs";
+import UserAnalysisSection from "@/components/UserAnalysisSection";
 import AccountSummaryPanel from "@/components/AccountSummaryPanel";
+import KeyFeaturesAnalyzed from "@/components/KeyFeaturesAnalyzed";
 import { getUsersFromCSV, UserData } from "@/utils/csvParser";
 import { calculatePerformanceData, calculateRadarData, calculateDetectionTrend } from "@/utils/graphUtils";
 
@@ -33,30 +34,39 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header onAnalysis={handleAnalysis} onSummary={handleUserSummary} />
+      <Header />
       <ResearcherUpload />
-      <ModelCards />
-      <DatasetOverview />
-      {selectedUser && selectedPredictions.length > 0 && (
-        <AccountSummaryPanel userData={selectedUser} predictions={selectedPredictions} />
-      )}
-      <MobilePerformanceTabs
-        performanceData={performanceData}
-        radarData={radarData}
-        detectionTrend={detectionTrend}
-        analysisPerformed={analysisPerformed}
-      />
-      <div className="hidden md:block">
-        <ModelComparison
-          performanceData={performanceData}
-          radarData={radarData}
-          detectionTrend={detectionTrend}
-        />
-        <ModelDetails
-          performanceData={analysisPerformed ? performanceData : []}
-          radarData={analysisPerformed ? radarData : []}
-        />
+      <div className="px-4 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="w-full max-w-lg ml-auto">
+            <UserAnalysisSection onAnalysis={handleAnalysis} onSummary={handleUserSummary} />
+          </div>
+        </div>
       </div>
+      <div className="px-4 md:px-8 pt-4">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          <div>
+            {selectedUser && selectedPredictions.length > 0 && (
+              <AccountSummaryPanel userData={selectedUser} predictions={selectedPredictions} />
+            )}
+          </div>
+          <div>
+            <ModelComparison
+              performanceData={performanceData}
+              radarData={radarData}
+              detectionTrend={detectionTrend}
+            />
+          </div>
+        </div>
+      </div>
+
+      <ModelDetails
+        performanceData={analysisPerformed ? performanceData : []}
+        radarData={analysisPerformed ? radarData : []}
+      />
+
+      <DatasetOverview />
+      <KeyFeaturesAnalyzed />
 
       <footer className="py-8 px-4 border-t border-border">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">

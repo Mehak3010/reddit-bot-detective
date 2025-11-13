@@ -1,10 +1,7 @@
 import React from 'react';
-import UserAnalysisSection from './UserAnalysisSection';
 import ThemeToggle from './ThemeToggle';
-import { UserData } from "@/utils/csvParser";
-import { ModelPrediction } from "@/utils/botDetection";
 
-const Header = ({ onAnalysis, onSummary }: { onAnalysis: () => void; onSummary?: (user: UserData, predictions: ModelPrediction[]) => void }) => {
+const Header = () => {
   return (
     <header className="py-12 px-4 md:px-8 bg-gradient-to-br from-primary/25 via-accent/15 to-background/60 border-b border-border shadow-sm">
       <div className="max-w-7xl mx-auto flex justify-between items-start">
@@ -18,7 +15,6 @@ const Header = ({ onAnalysis, onSummary }: { onAnalysis: () => void; onSummary?:
         </div>
         <div className="w-full max-w-lg flex flex-col items-end gap-2">
           <ThemeToggle />
-          <UserAnalysisSection onAnalysis={onAnalysis} onSummary={onSummary} />
         </div>
       </div>
     </header>
