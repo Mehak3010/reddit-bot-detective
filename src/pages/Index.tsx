@@ -6,6 +6,7 @@ import ModelComparison from "@/components/ModelComparison";
 import ModelDetails from "@/components/ModelDetails";
 import ResearcherUpload from "@/components/ResearcherUpload";
 import MobilePerformanceTabs from "@/components/MobilePerformanceTabs";
+import AccountSummaryPanel from "@/components/AccountSummaryPanel";
 import { getUsersFromCSV, UserData } from "@/utils/csvParser";
 import { calculatePerformanceData, calculateRadarData, calculateDetectionTrend } from "@/utils/graphUtils";
 
@@ -14,6 +15,8 @@ const Index = () => {
   const [radarData, setRadarData] = useState<any[]>([]);
   const [detectionTrend, setDetectionTrend] = useState<any[]>([]);
   const [analysisPerformed, setAnalysisPerformed] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [selectedPredictions, setSelectedPredictions] = useState<any[]>([]);
 
   const handleAnalysis = async () => {
     const users = await getUsersFromCSV();
@@ -23,12 +26,20 @@ const Index = () => {
     setAnalysisPerformed(true);
   };
 
+  const handleUserSummary = (user: UserData, predictions: any[]) => {
+    setSelectedUser(user);
+    setSelectedPredictions(predictions);
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <Header onAnalysis={handleAnalysis} />
+      <Header onAnalysis={handleAnalysis} onSummary={handleUserSummary} />
       <ResearcherUpload />
       <ModelCards />
       <DatasetOverview />
+      {selectedUser && selectedPredictions.length > 0 && (
+        <AccountSummaryPanel userData={selectedUser} predictions={selectedPredictions} />
+      )}
       <MobilePerformanceTabs
         performanceData={performanceData}
         radarData={radarData}
