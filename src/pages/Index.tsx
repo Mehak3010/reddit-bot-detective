@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import ModelCards from "@/components/ModelCards";
 import DatasetOverview from "@/components/DatasetOverview";
-import ModelComparison from "@/components/ModelComparison";
+import PerformanceSwitcher from "@/components/PerformanceSwitcher";
 import ModelDetails from "@/components/ModelDetails";
 import ResearcherUpload from "@/components/ResearcherUpload";
 import UserAnalysisSection from "@/components/UserAnalysisSection";
 import AccountSummaryPanel from "@/components/AccountSummaryPanel";
 import KeyFeaturesAnalyzed from "@/components/KeyFeaturesAnalyzed";
+import AnalysisPlaceholder from "@/components/AnalysisPlaceholder";
 import { getUsersFromCSV, UserData } from "@/utils/csvParser";
 import { calculatePerformanceData, calculateRadarData, calculateDetectionTrend } from "@/utils/graphUtils";
 
@@ -38,7 +39,7 @@ const Index = () => {
       <ResearcherUpload />
       <div className="px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="w-full max-w-lg ml-auto">
+          <div className="w-full max-w-lg mx-auto">
             <UserAnalysisSection onAnalysis={handleAnalysis} onSummary={handleUserSummary} />
           </div>
         </div>
@@ -46,12 +47,14 @@ const Index = () => {
       <div className="px-4 md:px-8 pt-4">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <div>
-            {selectedUser && selectedPredictions.length > 0 && (
+            {selectedUser && selectedPredictions.length > 0 ? (
               <AccountSummaryPanel userData={selectedUser} predictions={selectedPredictions} />
+            ) : (
+              <AnalysisPlaceholder />
             )}
           </div>
           <div>
-            <ModelComparison
+            <PerformanceSwitcher
               performanceData={performanceData}
               radarData={radarData}
               detectionTrend={detectionTrend}
