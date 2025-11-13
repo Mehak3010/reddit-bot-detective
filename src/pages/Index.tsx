@@ -74,7 +74,7 @@ const Index = () => {
       <footer className="py-8 px-4 border-t border-border">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
           <p>Reddit Bot Detection Comparative Analysis • Unsupervised Learning Models</p>
-          <p className="mt-2">Dataset: 370 users • 31 behavioral features</p>
+          <p className="mt-2">Made with love by Dr Puja Munjal,Mehak Arora,  Kunal Srivastava and Lakshay juneja</p>
         </div>
       </footer>
     </div>
