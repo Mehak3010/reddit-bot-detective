@@ -38,8 +38,8 @@ const PerformanceSwitcher = ({ performanceData, radarData, detectionTrend }: Per
             </CardHeader>
             <CardContent>
               <TabsContent value="metrics">
-                <div className="w-full overflow-x-auto">
-                  <ReBarChart width={600} height={300} data={performanceData}>
+                <div className="w-full">
+                  <ReBarChart width={480} height={300} data={performanceData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="metric" />
                     <YAxis domain={[0, 1]} />
@@ -54,8 +54,8 @@ const PerformanceSwitcher = ({ performanceData, radarData, detectionTrend }: Per
               </TabsContent>
 
               <TabsContent value="characteristics">
-                <div className="w-full overflow-x-auto">
-                  <ReRadarChart width={600} height={300} data={radarData}>
+                <div className="w-full">
+                  <ReRadarChart width={480} height={300} data={radarData}>
                     <PolarGrid />
                     <PolarAngleAxis dataKey="feature" />
                     <Radar dataKey="isolation" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.4} />
@@ -67,8 +67,8 @@ const PerformanceSwitcher = ({ performanceData, radarData, detectionTrend }: Per
               </TabsContent>
 
               <TabsContent value="trend">
-                <div className="w-full overflow-x-auto">
-                  <ReLineChart width={600} height={300} data={detectionTrend}>
+                <div className="w-full">
+                  <ReLineChart width={480} height={300} data={detectionTrend}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="threshold" />
                     <YAxis />
