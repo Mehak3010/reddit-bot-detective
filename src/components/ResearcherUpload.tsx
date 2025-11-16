@@ -1,5 +1,11 @@
 import { useState } from "react";
 import { uploadDataset } from "@/utils/api";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { UploadCloud, FileText, Loader2 } from "lucide-react";
 
 const ResearcherUpload = () => {
   const [datasetName, setDatasetName] = useState("");
@@ -7,8 +13,8 @@ const ResearcherUpload = () => {
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [message, setMessage] = useState<string>("");
 
-  const onUpload = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onUpload = async (e?: React.SyntheticEvent) => {
+    e?.preventDefault();
     if (!file) {
       setMessage("Please select a CSV file.");
       return;
@@ -35,47 +41,82 @@ const ResearcherUpload = () => {
 
   return (
     <section className="pt-6 pb-8 px-4">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 gap-6">
-        <div className="border rounded-lg p-4">
-          <h2 className="text-xl font-semibold mb-3">Upload Your Dataset</h2>
-          <p className="text-sm text-muted-foreground mb-4">
-            Upload a CSV; we will store the original file in secure cloud storage.
-          </p>
-          <form onSubmit={onUpload} className="space-y-3">
-            <div>
-              <label className="block text-sm mb-1">Dataset name (optional)</label>
-              <input
+      <div className="max-w-7xl mx-auto">
+        <Card className="border-l-4 border-l-primary">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <UploadCloud className="h-6 w-6 text-primary" />
+              Upload Your Dataset
+            </CardTitle>
+            <CardDescription>
+              Upload a CSV. The original file is stored in secure cloud storage.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="dataset-name">Dataset name (optional)</Label>
+              <Input
+                id="dataset-name"
                 type="text"
                 value={datasetName}
                 onChange={(e) => setDatasetName(e.target.value)}
-                className="w-full border rounded px-3 py-2 bg-background"
                 placeholder="e.g. lab-aug-2025"
               />
             </div>
-            <div>
-              <label className="block text-sm mb-1">CSV file</label>
+
+            <div className="space-y-2">
+              <Label htmlFor="dataset-file">CSV file</Label>
               <input
+                id="dataset-file"
                 type="file"
                 accept=".csv,text/csv"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="w-full"
+                className="hidden"
               />
+              <label
+                htmlFor="dataset-file"
+                className="flex cursor-pointer items-center justify-between rounded-lg border border-dashed p-4"
+              >
+                <div className="flex items-center gap-3">
+                  <FileText className="h-5 w-5 text-muted-foreground" />
+                  <div className="text-sm">
+                    {file ? (
+                      <span className="font-medium">{file.name}</span>
+                    ) : (
+                      <span className="text-muted-foreground">Click to choose a CSV file</span>
+                    )}
+                  </div>
+                </div>
+                <Button variant="outline" type="button">
+                  Browse
+                </Button>
+              </label>
             </div>
-            <button
-              type="submit"
-              disabled={loadingUpload}
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded hover:opacity-90 disabled:opacity-50"
-            >
-              {loadingUpload ? "Uploading…" : "Upload dataset"}
-            </button>
-          </form>
-        </div>
+          </CardContent>
+          <CardFooter className="flex items-center gap-3">
+            <Button type="submit" onClick={onUpload} disabled={loadingUpload}>
+              {loadingUpload ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Uploading
+                </>
+              ) : (
+                <>
+                  <UploadCloud className="h-4 w-4" />
+                  Upload dataset
+                </>
+              )}
+            </Button>
+          </CardFooter>
+        </Card>
+        {message && (
+          <div className="mt-4">
+            <Alert>
+              <AlertDescription>{message}</AlertDescription>
+            </Alert>
+          </div>
+        )}
       </div>
-      {message && (
-        <div className="max-w-7xl mx-auto mt-4 text-sm text-muted-foreground">
-          {message}
-        </div>
-      )}
     </section>
   );
 };
