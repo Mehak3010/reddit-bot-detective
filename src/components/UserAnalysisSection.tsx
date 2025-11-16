@@ -54,19 +54,19 @@ const UserAnalysisSection = ({ onAnalysis, onSummary }: { onAnalysis: () => void
 
   return (
     <div className="w-full">
-      <div className="flex w-full items-center space-x-2">
+      <div className="flex w-full flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:space-x-2">
         <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
           <Input
             type="text"
             placeholder="Enter Reddit username (e.g., RayesArmstrong)"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            className="pl-10"
+            className="pl-10 text-sm sm:text-base"
           />
         </div>
-        <Button onClick={handleSearch} disabled={loading}>
+        <Button onClick={handleSearch} disabled={loading} className="w-full sm:w-auto">
           {loading ? 'Analyzing...' : 'Analyze'}
         </Button>
       </div>

@@ -75,19 +75,19 @@ const ResearcherUpload = () => {
               />
               <label
                 htmlFor="dataset-file"
-                className="flex cursor-pointer items-center justify-between rounded-lg border border-dashed p-4"
+                className="flex flex-col sm:flex-row cursor-pointer items-start sm:items-center justify-between rounded-lg border border-dashed p-3 sm:p-4 gap-3 sm:gap-0"
               >
                 <div className="flex items-center gap-3">
-                  <FileText className="h-5 w-5 text-muted-foreground" />
-                  <div className="text-sm">
+                  <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+                  <div className="text-xs sm:text-sm">
                     {file ? (
-                      <span className="font-medium">{file.name}</span>
+                      <span className="font-medium break-all">{file.name}</span>
                     ) : (
                       <span className="text-muted-foreground">Click to choose a CSV file</span>
                     )}
                   </div>
                 </div>
-                <Button variant="outline" type="button">
+                <Button variant="outline" type="button" className="w-full sm:w-auto">
                   Browse
                 </Button>
               </label>

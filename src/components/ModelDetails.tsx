@@ -113,7 +113,7 @@ const ModelDetails = ({ performanceData, radarData }: ModelDetailsProps) => {
   return (
     <section className="pt-0 pb-12 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8">Model Deep Dive</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Model Deep Dive</h2>
 
         <Tabs defaultValue="isolation" className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1 md:gap-0">
@@ -128,19 +128,19 @@ const ModelDetails = ({ performanceData, radarData }: ModelDetailsProps) => {
             <TabsContent key={model.value} value={model.value} className="mt-6">
               <Card className="border-l-4 border-l-primary">
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-primary">{model.name}</CardTitle>
-                    <Badge variant="default">{model.badge}</Badge>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <CardTitle className="text-primary text-lg md:text-xl">{model.name}</CardTitle>
+                    <Badge variant="default" className="self-start sm:self-center">{model.badge}</Badge>
                   </div>
-                  <CardDescription>{model.description}</CardDescription>
+                  <CardDescription className="text-sm md:text-base">{model.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <h4 className="font-semibold mb-2 flex items-center gap-2 text-sm md:text-base">
                       <CheckCircle2 className="h-4 w-4 text-green-600" />
                       Strengths
                     </h4>
-                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                    <ul className="list-disc list-inside space-y-1 text-xs md:text-sm text-muted-foreground">
                       {model.strengths.map((strength, i) => (
                         <li key={i}>{strength}</li>
                       ))}
@@ -148,23 +148,30 @@ const ModelDetails = ({ performanceData, radarData }: ModelDetailsProps) => {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <h4 className="font-semibold mb-2 flex items-center gap-2 text-sm md:text-base">
                       <AlertCircle className="h-4 w-4 text-orange-600" />
                       Limitations
                     </h4>
-                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                    <ul className="list-disc list-inside space-y-1 text-xs md:text-sm text-muted-foreground">
                       {model.limitations.map((limitation, i) => (
                         <li key={i}>{limitation}</li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-4 pt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
                     <div className="flex items-center gap-2">
-                      <TrendingUp className="h-5 w-5 text-primary" />
+                      <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-primary" />
                       <div>
                         <p className="text-xs text-muted-foreground">Accuracy</p>
-                        <p className="font-semibold">{getAccuracy(getModelKey(model.name))}</p>
+                        <p className="font-semibold text-sm md:text-base">{getAccuracy(getModelKey(model.name))}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-green-600" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Speed Score</p>
+                        <p className="font-semibold text-sm md:text-base">{getSpeed(getModelKey(model.name))}</p>
                       </div>
                     </div>
                   </div>
