@@ -116,9 +116,9 @@ const ModelDetails = ({ performanceData, radarData }: ModelDetailsProps) => {
         <h2 className="text-3xl font-bold mb-8">Model Deep Dive</h2>
 
         <Tabs defaultValue="isolation" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1 md:gap-0">
             {modelDetailsData.map((model) => (
-              <TabsTrigger key={model.value} value={model.value}>
+              <TabsTrigger key={model.value} value={model.value} className="text-xs md:text-sm">
                 {model.name}
               </TabsTrigger>
             ))}

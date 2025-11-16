@@ -29,22 +29,22 @@ const PerformanceSwitcher = ({ performanceData, radarData, detectionTrend }: Per
         <Tabs defaultValue="metrics">
           <Card>
             <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-              <CardTitle>Model Performance Comparison</CardTitle>
-              <TabsList className="w-full md:w-auto">
-                <TabsTrigger value="metrics" className="flex-1">Metrics</TabsTrigger>
-                <TabsTrigger value="characteristics" className="flex-1">Characteristics</TabsTrigger>
-                <TabsTrigger value="trend" className="flex-1">Detection Trend</TabsTrigger>
+              <CardTitle className="text-lg md:text-xl">Model Performance Comparison</CardTitle>
+              <TabsList className="w-full md:w-auto grid grid-cols-3 md:flex md:flex-row gap-1 md:gap-0">
+                <TabsTrigger value="metrics" className="text-xs md:text-sm">Metrics</TabsTrigger>
+                <TabsTrigger value="characteristics" className="text-xs md:text-sm">Characteristics</TabsTrigger>
+                <TabsTrigger value="trend" className="text-xs md:text-sm">Detection Trend</TabsTrigger>
               </TabsList>
             </CardHeader>
             <CardContent>
               <TabsContent value="metrics">
-                <div className="w-full">
-                  <ReBarChart width={480} height={300} data={performanceData}>
+                <div className="w-full overflow-x-auto">
+                  <ReBarChart width={320} height={280} data={performanceData} className="min-w-[320px]">
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="metric" />
-                    <YAxis domain={[0, 1]} />
+                    <XAxis dataKey="metric" fontSize={12} />
+                    <YAxis domain={[0, 1]} fontSize={12} />
                     <ReTooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: 12 }} />
                     <Bar dataKey="isolation" name="Isolation Forest" fill="#4f46e5" />
                     <Bar dataKey="svm" name="One-Class SVM" fill="#06b6d4" />
                     <Bar dataKey="elliptic" name="Elliptic Envelope" fill="#f59e0b" />
@@ -54,10 +54,10 @@ const PerformanceSwitcher = ({ performanceData, radarData, detectionTrend }: Per
               </TabsContent>
 
               <TabsContent value="characteristics">
-                <div className="w-full">
-                  <ReRadarChart width={480} height={300} data={radarData}>
+                <div className="w-full overflow-x-auto">
+                  <ReRadarChart width={320} height={280} data={radarData} className="min-w-[320px]">
                     <PolarGrid />
-                    <PolarAngleAxis dataKey="feature" />
+                    <PolarAngleAxis dataKey="feature" fontSize={12} />
                     <Radar dataKey="isolation" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.4} />
                     <Radar dataKey="svm" stroke="#06b6d4" fill="#06b6d4" fillOpacity={0.4} />
                     <Radar dataKey="elliptic" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.4} />
@@ -67,13 +67,13 @@ const PerformanceSwitcher = ({ performanceData, radarData, detectionTrend }: Per
               </TabsContent>
 
               <TabsContent value="trend">
-                <div className="w-full">
-                  <ReLineChart width={480} height={300} data={detectionTrend}>
+                <div className="w-full overflow-x-auto">
+                  <ReLineChart width={320} height={280} data={detectionTrend} className="min-w-[320px]">
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="threshold" />
-                    <YAxis />
+                    <XAxis dataKey="threshold" fontSize={12} />
+                    <YAxis fontSize={12} />
                     <ReTooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: 12 }} />
                     <Line type="monotone" dataKey="isolation" stroke="#4f46e5" />
                     <Line type="monotone" dataKey="svm" stroke="#06b6d4" />
                     <Line type="monotone" dataKey="elliptic" stroke="#f59e0b" />
