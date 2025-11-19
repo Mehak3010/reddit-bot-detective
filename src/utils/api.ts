@@ -22,8 +22,15 @@ export async function markVerifiedAccounts(usernames: string[]) {
   return res.json();
 }
 
-export async function getUsers() {
-  const res = await fetch(`${API_BASE}/users`);
+export async function getUsers(dataset?: string) {
+  const url = dataset ? `${API_BASE}/users?dataset=${encodeURIComponent(dataset)}` : `${API_BASE}/users`;
+  const res = await fetch(url);
   if (!res.ok) throw new Error(`Fetch users failed: ${res.status}`);
+  return res.json();
+}
+
+export async function getDatasets() {
+  const res = await fetch(`${API_BASE}/datasets`);
+  if (!res.ok) throw new Error(`Fetch datasets failed: ${res.status}`);
   return res.json();
 }

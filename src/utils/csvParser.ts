@@ -126,10 +126,10 @@ const dbUserToUserData = (u: DBUser): UserData | null => {
   }
 };
 
-export const searchUserInCSV = async (username: string): Promise<UserData | null> => {
+export const searchUserInCSV = async (username: string, dataset?: string): Promise<UserData | null> => {
   // Try DB via API first
   try {
-    const data = await getUsers();
+    const data = await getUsers(dataset);
     const users: DBUser[] = Array.isArray((data as any)?.users) ? (data as any).users : [];
     const match = users.find((u: DBUser) => (u.username || '').toLowerCase() === username.toLowerCase());
     if (match) return dbUserToUserData(match);
@@ -153,10 +153,10 @@ export const searchUserInCSV = async (username: string): Promise<UserData | null
   }
 };
 
-export const getUsersFromCSV = async (): Promise<UserData[]> => {
+export const getUsersFromCSV = async (dataset?: string): Promise<UserData[]> => {
   // Prefer DB via API
   try {
-    const data = await getUsers();
+    const data = await getUsers(dataset);
     const users: DBUser[] = Array.isArray((data as any)?.users) ? (data as any).users : [];
     const mapped = users.map(dbUserToUserData).filter((u): u is UserData => !!u);
     if (mapped.length) return mapped;

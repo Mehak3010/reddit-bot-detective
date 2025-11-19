@@ -31,13 +31,13 @@ app.get('/health', (req, res) => res.json({ ok: true }));
 // List combined users
 app.get('/users', async (req, res) => {
   try {
+    const dataset = (req.query?.dataset || '').toString().trim();
     let users = [];
     if (supabase) {
       try {
-        const { data, error } = await supabase
-          .from('users')
-          .select('id, username, verified, source, meta')
-          .order('id', { ascending: false });
+        let query = supabase.from('users').select('id, username, verified, source, meta').order('id', { ascending: false });
+        if (dataset) query = query.eq('source', dataset);
+        const { data, error } = await query;
         if (!error && data) {
           users = (data || []).map(r => ({
             id: r.id,
@@ -52,13 +52,49 @@ app.get('/users', async (req, res) => {
       }
     }
     if (!users.length) {
-      const rows = await db.all('SELECT id, username, verified, source, meta FROM users ORDER BY id DESC');
+      const sql = dataset
+        ? 'SELECT id, username, verified, source, meta FROM users WHERE source = ? ORDER BY id DESC'
+        : 'SELECT id, username, verified, source, meta FROM users ORDER BY id DESC';
+      const params = dataset ? [dataset] : [];
+      const rows = await db.all(sql, params);
       users = rows.map(r => ({ id: r.id, username: r.username, verified: !!r.verified, source: r.source, meta: r.meta ? JSON.parse(r.meta) : {} }));
     }
     res.json({ users });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Failed to fetch users' });
+    res.json({ users: [] });
+  }
+});
+
+// List datasets (sources) with counts
+app.get('/datasets', async (req, res) => {
+  try {
+    let datasets = [];
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('username, source');
+        if (!error && Array.isArray(data)) {
+          const counts = new Map();
+          for (const r of data) {
+            const src = r.source || 'unknown';
+            counts.set(src, (counts.get(src) || 0) + 1);
+          }
+          datasets = Array.from(counts.entries()).map(([name, count]) => ({ name, count }));
+        }
+      } catch (e) {
+        console.error('Supabase datasets fetch failed, falling back to SQLite', e);
+      }
+    }
+    if (!datasets.length) {
+      const rows = await db.all('SELECT source as name, COUNT(*) as count FROM users GROUP BY source ORDER BY count DESC');
+      datasets = rows.map(r => ({ name: r.name || 'unknown', count: r.count || 0 }));
+    }
+    res.json({ datasets });
+  } catch (e) {
+    console.error(e);
+    res.json({ datasets: [] });
   }
 });
 
