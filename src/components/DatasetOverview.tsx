@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, MessageSquare, TrendingUp, Database } from "lucide-react";
 
-const DatasetOverview = () => {
+const DatasetOverview = ({ usersCount = 0 }: { usersCount?: number }) => {
   return (
     <section className="pt-4 pb-12 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
@@ -14,7 +14,7 @@ const DatasetOverview = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-primary">370</div>
+              <div className="text-2xl font-bold text-primary">{usersCount}</div>
               <p className="text-xs text-muted-foreground">Reddit accounts analyzed</p>
             </CardContent>
           </Card>

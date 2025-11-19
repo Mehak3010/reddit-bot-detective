@@ -19,6 +19,7 @@ const Index = () => {
   const [analysisPerformed, setAnalysisPerformed] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   const [selectedPredictions, setSelectedPredictions] = useState<any[]>([]);
+  const [usersCount, setUsersCount] = useState<number>(0);
 
   const handleAnalysis = async () => {
     const users = await getUsersFromCSV();
@@ -26,6 +27,7 @@ const Index = () => {
     setRadarData(calculateRadarData(users));
     setDetectionTrend(calculateDetectionTrend(users));
     setAnalysisPerformed(true);
+    setUsersCount(users.length);
   };
 
   const handleUserSummary = (user: UserData, predictions: any[]) => {
@@ -36,7 +38,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <ResearcherUpload />
+      <ResearcherUpload onUploaded={handleAnalysis} />
       <div className="px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="w-full max-w-lg mx-auto">
@@ -68,7 +70,7 @@ const Index = () => {
         radarData={analysisPerformed ? radarData : []}
       />
 
-      <DatasetOverview />
+      <DatasetOverview usersCount={usersCount} />
       <KeyFeaturesAnalyzed />
 
       <footer className="py-8 px-4 border-t border-border">

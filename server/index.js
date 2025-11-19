@@ -65,8 +65,37 @@ app.post('/upload-dataset', upload.single('file'), async (req, res) => {
 
   try {
     const safeName = String(datasetNameRaw).replace(/[^a-zA-Z0-9-_]/g, '_');
+    const insertUsersFromCSV = async (buffer) => {
+      return new Promise((resolve, reject) => {
+        parse(buffer, { columns: true, skip_empty_lines: true }, async (err, records) => {
+          if (err) return reject(err);
+          try {
+            let count = 0;
+            for (const rec of records) {
+              const username = String(rec.author_name || rec.username || '').trim();
+              if (!username) continue;
+              const meta = JSON.stringify(rec);
+              if (supabase) {
+                const { error } = await supabase
+                  .from('users')
+                  .upsert({ username, verified: false, source: safeName, meta }, { onConflict: 'username' });
+                if (error) throw error;
+              } else {
+                await db.run(
+                  'INSERT INTO users (username, verified, source, meta) VALUES (?, 0, ?, ?) ON CONFLICT(username) DO UPDATE SET source=excluded.source, meta=excluded.meta',
+                  [username, safeName, meta]
+                );
+              }
+              count++;
+            }
+            resolve(count);
+          } catch (e) {
+            reject(e);
+          }
+        });
+      });
+    };
     if (supabase) {
-      // Store raw CSV file in Supabase Storage (bucket: datasets)
       const buffer = await fs.promises.readFile(filePath);
       const storagePath = `${safeName}/${Date.now()}-${originalName}`;
       const { error } = await supabase
@@ -74,15 +103,17 @@ app.post('/upload-dataset', upload.single('file'), async (req, res) => {
         .from('datasets')
         .upload(storagePath, buffer, { contentType: 'text/csv', upsert: true });
       if (error) throw error;
+      const importedCount = await insertUsersFromCSV(buffer);
       const { data: pub } = supabase.storage.from('datasets').getPublicUrl(storagePath);
       fs.unlink(filePath, () => {});
-      return res.json({ ok: true, datasetName: safeName, storagePath, publicUrl: pub?.publicUrl || null });
+      return res.json({ ok: true, datasetName: safeName, storagePath, publicUrl: pub?.publicUrl || null, importedCount });
     }
-    // Fallback: keep the uploaded file locally
     const newRel = path.join('uploads', `${Date.now()}-${safeName}-${originalName}`);
     const newAbs = path.join(__dirname, newRel);
     await fs.promises.rename(filePath, newAbs);
-    return res.json({ ok: true, datasetName: safeName, localPath: newRel });
+    const buffer = await fs.promises.readFile(newAbs);
+    const importedCount = await insertUsersFromCSV(buffer);
+    return res.json({ ok: true, datasetName: safeName, localPath: newRel, importedCount });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Failed to store dataset file' });

@@ -7,7 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { UploadCloud, FileText, Loader2 } from "lucide-react";
 
-const ResearcherUpload = () => {
+interface UploadInfo {
+  importedCount?: number;
+  datasetName: string;
+}
+
+const ResearcherUpload = ({ onUploaded }: { onUploaded?: (info: UploadInfo) => void }) => {
   const [datasetName, setDatasetName] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [loadingUpload, setLoadingUpload] = useState(false);
@@ -22,16 +27,18 @@ const ResearcherUpload = () => {
     setLoadingUpload(true);
     setMessage("");
     try {
-      const res = await uploadDataset(datasetName.trim() || file.name, file);
+      const name = datasetName.trim() || file.name;
+      const res = await uploadDataset(name, file);
       if (res.publicUrl) {
-        setMessage(`Uploaded to cloud storage: ${res.publicUrl}`);
+        setMessage(`Uploaded: ${name} • Imported ${res.importedCount ?? 0} users • ${res.publicUrl}`);
       } else if (res.storagePath) {
-        setMessage(`Uploaded to storage path: ${res.storagePath}`);
+        setMessage(`Uploaded: ${name} • Imported ${res.importedCount ?? 0} users • ${res.storagePath}`);
       } else if (res.localPath) {
-        setMessage(`Saved locally at ${res.localPath}`);
+        setMessage(`Uploaded: ${name} • Imported ${res.importedCount ?? 0} users • ${res.localPath}`);
       } else {
-        setMessage('Upload completed.');
+        setMessage(`Upload completed • Imported ${res.importedCount ?? 0} users`);
       }
+      if (onUploaded) onUploaded({ importedCount: res.importedCount, datasetName: name });
     } catch (err: any) {
       setMessage(err?.message || "Upload failed");
     } finally {
