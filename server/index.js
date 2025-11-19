@@ -31,24 +31,30 @@ app.get('/health', (req, res) => res.json({ ok: true }));
 // List combined users
 app.get('/users', async (req, res) => {
   try {
+    let users = [];
     if (supabase) {
-      const { data, error } = await supabase
-        .from('users')
-        .select('id, username, verified, source, meta')
-        .order('id', { ascending: false });
-      if (error) throw error;
-      const users = (data || []).map(r => ({
-        id: r.id,
-        username: r.username,
-        verified: !!r.verified,
-        source: r.source,
-        meta: typeof r.meta === 'string' ? JSON.parse(r.meta || '{}') : (r.meta || {})
-      }));
-      return res.json({ users });
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('id, username, verified, source, meta')
+          .order('id', { ascending: false });
+        if (!error && data) {
+          users = (data || []).map(r => ({
+            id: r.id,
+            username: r.username,
+            verified: !!r.verified,
+            source: r.source,
+            meta: typeof r.meta === 'string' ? JSON.parse(r.meta || '{}') : (r.meta || {})
+          }));
+        }
+      } catch (e) {
+        console.error('Supabase users fetch failed, falling back to SQLite', e);
+      }
     }
-    // Fallback to SQLite
-    const rows = await db.all('SELECT id, username, verified, source, meta FROM users ORDER BY id DESC');
-    const users = rows.map(r => ({ id: r.id, username: r.username, verified: !!r.verified, source: r.source, meta: r.meta ? JSON.parse(r.meta) : {} }));
+    if (!users.length) {
+      const rows = await db.all('SELECT id, username, verified, source, meta FROM users ORDER BY id DESC');
+      users = rows.map(r => ({ id: r.id, username: r.username, verified: !!r.verified, source: r.source, meta: r.meta ? JSON.parse(r.meta) : {} }));
+    }
     res.json({ users });
   } catch (e) {
     console.error(e);
@@ -96,17 +102,21 @@ app.post('/upload-dataset', upload.single('file'), async (req, res) => {
       });
     };
     if (supabase) {
-      const buffer = await fs.promises.readFile(filePath);
-      const storagePath = `${safeName}/${Date.now()}-${originalName}`;
-      const { error } = await supabase
-        .storage
-        .from('datasets')
-        .upload(storagePath, buffer, { contentType: 'text/csv', upsert: true });
-      if (error) throw error;
-      const importedCount = await insertUsersFromCSV(buffer);
-      const { data: pub } = supabase.storage.from('datasets').getPublicUrl(storagePath);
-      fs.unlink(filePath, () => {});
-      return res.json({ ok: true, datasetName: safeName, storagePath, publicUrl: pub?.publicUrl || null, importedCount });
+      try {
+        const buffer = await fs.promises.readFile(filePath);
+        const storagePath = `${safeName}/${Date.now()}-${originalName}`;
+        const { error } = await supabase
+          .storage
+          .from('datasets')
+          .upload(storagePath, buffer, { contentType: 'text/csv', upsert: true });
+        if (error) throw error;
+        const importedCount = await insertUsersFromCSV(buffer);
+        const { data: pub } = supabase.storage.from('datasets').getPublicUrl(storagePath);
+        fs.unlink(filePath, () => {});
+        return res.json({ ok: true, datasetName: safeName, storagePath, publicUrl: pub?.publicUrl || null, importedCount });
+      } catch (e) {
+        console.error('Supabase upload failed, falling back to local', e);
+      }
     }
     const newRel = path.join('uploads', `${Date.now()}-${safeName}-${originalName}`);
     const newAbs = path.join(__dirname, newRel);
